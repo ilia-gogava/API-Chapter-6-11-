@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from pathlib import Path
+from environs import Env # new
+
+env = Env() # new
+env.read_env() # new
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +50,8 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration", # new
     'posts',
     # Local
+    "whitenoise.runserver_nostatic", # new
+    "whitenoise.middleware.WhiteNoiseMiddleware", # new
 
     "rest_framework", # new
     "corsheaders", # new
@@ -163,6 +170,13 @@ REST_FRAMEWORK = { # new
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema", # new
 }
 
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Blog API Project",
+    "DESCRIPTION": "A sample blog to learn about DRF",
+    "VERSION": "1.0.0",
+    # OTHER SETTINGS
+}
+
 # new
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
@@ -175,4 +189,21 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # new
 
 SITE_ID = 1 # new
 
+DEBUG = env.bool("DEBUG", default=False)
 
+
+ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1"] # new
+
+
+
+SECRET_KEY = env.str("SECRET_KEY")
+
+DATABASES = {
+"default": env.dj_db_url("DATABASE_URL") # new
+}
+
+STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [BASE_DIR / "static"] # new
+STATIC_ROOT = BASE_DIR / "staticfiles" # new
+STATICFILES_STORAGE ="whitenoise.storage.CompressedManifestStaticFilesStorage" # new
