@@ -37,11 +37,36 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.sites", # new
+    #3rd party
+    "allauth", # new
+    "allauth.account", # new
+    "allauth.socialaccount", # new
+    "dj_rest_auth.registration", # new
+    'posts',
+    # Local
+
+    "rest_framework", # new
+    "corsheaders", # new
+    "rest_framework.authtoken", # new
+    "dj_rest_auth", # new
+    "drf_spectacular", # new
+
+
+
+
+    "accounts.apps.AccountsConfig", # new
+    "posts.apps.PostsConfig", # new
+
+
+
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware", # new
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -62,6 +87,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "django.template.context_processors.request", # new
             ],
         },
     },
@@ -121,3 +147,32 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = "accounts.CustomUser" # new
+
+REST_FRAMEWORK = { # new
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny", # new
+        "rest_framework.permissions.IsAuthenticated", # new
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [ # new
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.TokenAuthentication", # new
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema", # new
+}
+
+# new
+CORS_ORIGIN_WHITELIST = (
+    "http://localhost:3000",
+    "http://localhost:8000",
+    )
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"] # new
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # new
+
+SITE_ID = 1 # new
+
+
